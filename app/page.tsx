@@ -177,13 +177,13 @@ export default function Home() {
 
             <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-red-500">
               <p className="text-gray-800">
-                <span className="font-semibold text-gray-900">祝贺</span>Jason Wang在2022年RCM 6级考试中获得First Class Honours with distinction <span className="font-semibold">92分</span>的好成绩。
+                <span className="font-semibold text-gray-900">祝贺</span>Jason Wang在2022年RCM 6级考试中获得<span className="text-red-600 font-semibold">First Class Honours with Distinction</span> <span className="font-semibold">92分</span>的好成绩。
               </p>
             </div>
 
             <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-red-500">
               <p className="text-gray-800">
-                <span className="font-semibold text-gray-900">祝贺</span>Brayden Liu在2022年RCM 6级考试中获得First Class Honours with distinction <span className="font-semibold">90分</span>的好成绩。
+                <span className="font-semibold text-gray-900">祝贺</span>Brayden Liu在2022年RCM 6级考试中获得<span className="text-red-600 font-semibold">First Class Honours with Distinction</span> <span className="font-semibold">90分</span>的好成绩。
               </p>
             </div>
 

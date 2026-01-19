@@ -38,6 +38,8 @@ const TREBLE_CLEF_POSITIONS: Record<string, number> = {
   E6: -6,
   F6: -7,
   G6: -8,
+  A6: -9,
+  B6: -10,
 };
 
 // Difficulty ranges
@@ -88,6 +90,8 @@ const DIFFICULTY_RANGES = {
       "E6",
       "F6",
       "G6",
+      "A6",
+      "B6",
     ],
   },
 };
@@ -338,12 +342,22 @@ export default function ReadNotesPage() {
                 strokeWidth="3"
               />
             )}
-            {position <= -8 && (
+            {position <= -8 && position > -10 && (
               <line
                 x1="140"
                 y1={30 - 3 * 10}
                 x2="180"
                 y2={30 - 3 * 10}
+                stroke="#374151"
+                strokeWidth="3"
+              />
+            )}
+            {position <= -10 && (
+              <line
+                x1="140"
+                y1={30 - 4 * 10}
+                x2="180"
+                y2={30 - 4 * 10}
                 stroke="#374151"
                 strokeWidth="3"
               />

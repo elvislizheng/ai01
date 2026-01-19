@@ -116,6 +116,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Learning Tools */}
+      <section className="py-12 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Interactive Learning Tools</h2>
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-xl transition-shadow">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-indigo-100 rounded-full mb-4">
+                <Music className="w-10 h-10 text-indigo-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Read Music Notes</h3>
+              <p className="text-gray-600 mb-6">
+                Practice reading music notes on the staff with an interactive piano keyboard.
+                Perfect for beginners and intermediate students to improve sight-reading skills.
+              </p>
+              <a
+                href="/learn/read-notes"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors"
+              >
+                <Music className="w-5 h-5" />
+                Start Learning
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Student Achievements */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

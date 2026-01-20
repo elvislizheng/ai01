@@ -129,6 +129,7 @@ export default function ReadNotesPage() {
   const [showLabels, setShowLabels] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showHelp, setShowHelp] = useState(false);
+  const [feedbackTones, setFeedbackTones] = useState(true);
 
   // Game state
   const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
@@ -454,7 +455,7 @@ export default function ReadNotesPage() {
         `}
       >
         {showLabels && (
-          <span className="absolute bottom-2 left-1/2 -translate-x-1/2 text-sm text-gray-700 font-medium">
+          <span className="absolute bottom-2 left-1/2 -translate-x-1/2 text-sm text-gray-900 font-semibold">
             {note}
           </span>
         )}
@@ -466,50 +467,25 @@ export default function ReadNotesPage() {
     const octaves = getCurrentOctaveRange();
 
     return (
-      <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl p-4 shadow-xl">
-        <div className="flex flex-col items-center gap-4">
-          {/* First row: first 2 octaves */}
-          <div className="flex flex-col items-center gap-4 md:flex-row md:justify-center">
-            {octaves.slice(0, 2).map((octave) => (
-              <div key={octave} className="relative flex">
-                {/* White keys */}
-                {NOTES.map((note) => (
-                  <div key={`${note}${octave}`} className="relative">
-                    {renderPianoKey(note, octave)}
-                    {/* Black keys */}
-                    {["C", "D", "F", "G", "A"].includes(note) && (
-                      <div
-                        className="absolute"
-                        style={{ left: "calc(100% - 16px)", top: 0 }}
-                      >
-                        {renderPianoKey(`${note}#`, octave, true)}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-
-          {/* Second row: third octave if exists */}
-          {octaves.length > 2 && (
-            <div className="relative flex">
+      <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl p-4 shadow-xl overflow-x-auto">
+        <div className="flex justify-center">
+          {octaves.map((octave) => (
+            <div key={octave} className="relative flex">
               {NOTES.map((note) => (
-                <div key={`${note}${octaves[2]}`} className="relative">
-                  {renderPianoKey(note, octaves[2])}
-                  {/* Black keys */}
+                <div key={`${note}${octave}`} className="relative">
+                  {renderPianoKey(note, octave)}
                   {["C", "D", "F", "G", "A"].includes(note) && (
                     <div
                       className="absolute"
                       style={{ left: "calc(100% - 16px)", top: 0 }}
                     >
-                      {renderPianoKey(`${note}#`, octaves[2], true)}
+                      {renderPianoKey(`${note}#`, octave, true)}
                     </div>
                   )}
                 </div>
               ))}
             </div>
-          )}
+          ))}
         </div>
       </div>
     );
@@ -549,7 +525,7 @@ export default function ReadNotesPage() {
                   ${
                     difficulty === level
                       ? "border-indigo-600 bg-indigo-50 text-indigo-700"
-                      : "border-gray-200 hover:border-indigo-300"
+                      : "border-gray-200 hover:border-indigo-300 text-gray-900"
                   }
                 `}
                 >
@@ -580,7 +556,7 @@ export default function ReadNotesPage() {
                   ${
                     exerciseLength === length
                       ? "border-indigo-600 bg-indigo-50 text-indigo-700"
-                      : "border-gray-200 hover:border-indigo-300"
+                      : "border-gray-200 hover:border-indigo-300 text-gray-900"
                   }
                 `}
               >
@@ -599,7 +575,7 @@ export default function ReadNotesPage() {
               onClick={() => setShowLabels(!showLabels)}
               className={`
                 flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all
-                ${showLabels ? "border-indigo-600 bg-indigo-50" : "border-gray-200"}
+                ${showLabels ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-gray-200 text-gray-900"}
               `}
             >
               {showLabels ? (
@@ -613,7 +589,7 @@ export default function ReadNotesPage() {
               onClick={() => setSoundEnabled(!soundEnabled)}
               className={`
                 flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all
-                ${soundEnabled ? "border-indigo-600 bg-indigo-50" : "border-gray-200"}
+                ${soundEnabled ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-gray-200 text-gray-900"}
               `}
             >
               {soundEnabled ? (
@@ -625,7 +601,7 @@ export default function ReadNotesPage() {
             </button>
             <button
               onClick={() => setShowHelp(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-gray-200 hover:border-indigo-300 transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-gray-200 hover:border-indigo-300 text-gray-900 transition-all"
             >
               <HelpCircle className="w-5 h-5" />
               <span>Help</span>

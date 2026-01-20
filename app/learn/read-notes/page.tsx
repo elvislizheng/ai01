@@ -178,7 +178,7 @@ export default function ReadNotesPage() {
   }, [timerActive, gameState]);
 
   const playNote = useCallback(
-    (note: string, octave: number) => {
+    async (note: string, octave: number) => {
       if (!soundEnabled) return;
 
       if (!audioContextRef.current) {
@@ -186,6 +186,11 @@ export default function ReadNotesPage() {
       }
 
       const ctx = audioContextRef.current;
+
+      // iOS requires resuming the audio context after user interaction
+      if (ctx.state === "suspended") {
+        await ctx.resume();
+      }
       const oscillator = ctx.createOscillator();
       const gainNode = ctx.createGain();
 

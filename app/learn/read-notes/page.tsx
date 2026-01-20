@@ -145,8 +145,45 @@ export default function ReadNotesPage() {
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const audioUnlockedRef = useRef(false);
 
-  // Initialize audio context
+  // Initialize and unlock audio context for iOS
+  const initAudioContext = useCallback(async () => {
+    if (audioUnlockedRef.current && audioContextRef.current) {
+      // Already unlocked, just resume if needed
+      if (audioContextRef.current.state === "suspended") {
+        await audioContextRef.current.resume();
+      }
+      return audioContextRef.current;
+    }
+
+    // Create AudioContext with webkit fallback for older iOS
+    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContextClass();
+    }
+
+    const ctx = audioContextRef.current;
+
+    // Resume if suspended
+    if (ctx.state === "suspended") {
+      await ctx.resume();
+    }
+
+    // Play a silent buffer to unlock audio on iOS
+    if (!audioUnlockedRef.current) {
+      const buffer = ctx.createBuffer(1, 1, 22050);
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(ctx.destination);
+      source.start(0);
+      audioUnlockedRef.current = true;
+    }
+
+    return ctx;
+  }, []);
+
+  // Cleanup audio context
   useEffect(() => {
     return () => {
       if (audioContextRef.current) {
@@ -182,16 +219,9 @@ export default function ReadNotesPage() {
     async (note: string, octave: number) => {
       if (!soundEnabled) return;
 
-      if (!audioContextRef.current) {
-        audioContextRef.current = new AudioContext();
-      }
+      const ctx = await initAudioContext();
+      if (!ctx) return;
 
-      const ctx = audioContextRef.current;
-
-      // iOS requires resuming the audio context after user interaction
-      if (ctx.state === "suspended") {
-        await ctx.resume();
-      }
       const oscillator = ctx.createOscillator();
       const gainNode = ctx.createGain();
 
@@ -211,7 +241,34 @@ export default function ReadNotesPage() {
       oscillator.start(ctx.currentTime);
       oscillator.stop(ctx.currentTime + 1.5);
     },
-    [soundEnabled],
+    [soundEnabled, initAudioContext],
+  );
+
+  const playFeedbackTone = useCallback(
+    async (type: "high" | "low") => {
+      if (!soundEnabled || !feedbackTones) return;
+
+      const ctx = await initAudioContext();
+      if (!ctx) return;
+
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      // High tone (880Hz) for correct, low tone (220Hz) for incorrect
+      const freq = type === "high" ? 880 : 220;
+      oscillator.frequency.setValueAtTime(freq, ctx.currentTime);
+      oscillator.type = "sine";
+
+      gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + 0.3);
+    },
+    [soundEnabled, feedbackTones, initAudioContext],
   );
 
   const generateExercise = useCallback(() => {
@@ -252,6 +309,7 @@ export default function ReadNotesPage() {
       setScore((prev) => prev + 1);
       setFeedback("correct");
       setShowCelebration(true);
+      playFeedbackTone("high");
 
       setTimeout(() => {
         setShowCelebration(false);
@@ -269,6 +327,7 @@ export default function ReadNotesPage() {
     } else {
       // Incorrect - gentle encouragement
       setFeedback("incorrect");
+      playFeedbackTone("low");
       setTimeout(() => setFeedback(null), 1000);
     }
   };

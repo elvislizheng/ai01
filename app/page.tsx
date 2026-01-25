@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Music, Award, Clock, Users } from "lucide-react";
+import { Music, Award, Clock, Users, FileMusic } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
@@ -120,7 +120,7 @@ export default function Home() {
       <section className="py-12 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Interactive Learning Tools</h2>
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-xl transition-shadow">
               <div className="inline-flex items-center justify-center w-20 h-20 bg-indigo-100 rounded-full mb-4">
                 <Music className="w-10 h-10 text-indigo-600" />
@@ -136,6 +136,24 @@ export default function Home() {
               >
                 <Music className="w-5 h-5" />
                 Start Learning
+              </a>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-xl transition-shadow">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-purple-100 rounded-full mb-4">
+                <FileMusic className="w-10 h-10 text-purple-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">MIDI Editor</h3>
+              <p className="text-gray-600 mb-6">
+                Upload, edit, and export MIDI files with our visual piano roll editor.
+                Create sheet music PDFs or export your compositions as MIDI files.
+              </p>
+              <a
+                href="/midi-editor"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors"
+              >
+                <FileMusic className="w-5 h-5" />
+                Open Editor
               </a>
             </div>
           </div>
